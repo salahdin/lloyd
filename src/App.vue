@@ -1,60 +1,98 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+  <div id="app">
+    <v-app primary>
+      <v-navigation-drawer
+        enable-resize-watcher
+        absolute
+        temporary
+        v-model="sideNav"
+        class="hidden-sm-and-up"
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+        <v-card>
+          <v-list dense>
+            <v-list-item-group v-model="selectedItem" color="primary">
+              <v-list-item v-for="(item, i) in navigation" :key="i">
+                <v-list-item-icon>
+                  <v-icon v-text="item.icon"></v-icon>
+                </v-list-item-icon>
+                <router-link style="cursor: pointer" tag="span" :to="item.link">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                  </v-list-item-content>
+                </router-link>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-navigation-drawer>
+      <v-card color="grey lighten-4" text>
+        <v-toolbar>
+          <v-app-bar-nav-icon
+            @click="sideNav = !sideNav"
+            class="hidden-sm-and-up"
+          ></v-app-bar-nav-icon>
+          <v-toolbar-title>
+            <router-link to="/" tag="span" style="cursor: pointer">
+              <v-img
+                  class="ml-3"
+                  contain
+                  height="48px"
+                  src="@/assets/logo.png"
+                ></v-img>
+              </router-link>
+            </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items class="hidden-xs-only">
+            <v-btn text v-for="item in navigation" :key="item.title">
+              <router-link style="cursor: pointer" tag="span" :to="item.link">
+                <v-icon left>{{ item.icon }}</v-icon>
+                {{ item.title }}
+              </router-link>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+      </v-card>
+      <v-main>
+        <router-view></router-view>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      sideNav: false,
+      selectedItem: 1,
+    };
   },
+  computed: {
+    navigation() {
+      let navigations = [
+        { icon: "mdi-login", title: "login", link: "/login" }
+      ]
 
-  data: () => ({
-    //
-  }),
+      if (this.userAuthenticated) {
+        let newNavigations = [
+          { icon: "mdi-home", title: "home", link: "/" },
+          { icon: "mdi-account", title: "account", link: "/user/profile" },
+        ];
+
+        return newNavigations
+      }
+      return navigations;
+    },
+    userAuthenticated() {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    },
+  },
+  methods: {
+      onLogout () {
+        this.$store.dispatch('logout')
+      }
+    }
 };
 </script>
+<style lang="scss">
+</style>

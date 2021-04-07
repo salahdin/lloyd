@@ -1,32 +1,34 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-carousel>
-            <v-carousel-item
-              v-for="(item, i) in meetups"
-              :key="i"
-              :src="item.imgUrl"
-              reverse-transition="fade-transition"
-              transition="fade-transition"
-            ></v-carousel-item>
-          </v-carousel>
+  <div>
+    <v-alert
+      prominent
+      type="error"
+    >
+      <v-row align="center">
+        <v-col class="grow">
+          Nunc nonummy metus. Nunc interdum lacus sit amet orci. Nullam dictum felis eu pede mollis pretium. Cras id dui.
+        </v-col>
+        <v-col class="shrink">
+          <v-btn>Take action</v-btn>
         </v-col>
       </v-row>
-    </v-container>
-  </v-app>
+    </v-alert>
+    <v-alert
+      color="blue-grey"
+      dark
+      dense
+      icon="mdi-school"
+      prominent
+    >
+      Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Aenean ut eros et nisl sagittis vestibulum. Sed aliquam ultrices mauris. Donec vitae orci sed dolor rutrum auctor.
+    </v-alert>
+    <v-alert
+      icon="mdi-shield-lock-outline"
+      prominent
+      text
+      type="info"
+    >
+      Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Sed in libero ut nibh placerat accumsan.. Curabitur blandit mollis lacus. Curabitur blandit mollis lacus.
+    </v-alert>
+  </div>
 </template>
-
-<script>
-export default {
-  computed: {
-    meetups() {
-      return this.$store.getters.loadedMeetups;
-    },
-  },
-};
-</script>
-
-<style>
-</style>
